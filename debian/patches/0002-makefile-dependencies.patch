@@ -1,0 +1,21 @@
+From: Adrian Bunk <bunk@debian.org>
+Date: Wed, 15 Aug 2018 11:34:42 +0300
+Subject: Fix a dependency bug in Makefile.am
+
+Old bug exposed by automake 1.16.
+
+Bug-Debian: https://bugs.debian.org/905472
+---
+ Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 80acb10..bd7e5e8 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -8,4 +8,4 @@ man_MANS = textwrap.3 dotextwrap.1
+ 
+ bin_PROGRAMS = dotextwrap
+ dotextwrap_SOURCES = dotextwrap.c
+-dotextwrap_LDADD = -ltextwrap
++dotextwrap_LDADD = libtextwrap.la

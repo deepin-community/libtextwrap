@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -x
+case "$1" in
+	clean)
+		rm -rf Makefile.in aclocal.m4 autom4te.cache config \
+			config.h.in configure stamp-h.in
+	;;
+
+	*)
+		mkdir config
+		aclocal -I config
+		autoheader
+		automake --foreign --add-missing --copy
+		libtoolize --copy
+		autoconf
+
+		# is this OK?
+		rm -rf autom4te.cache
+	;;
+esac
+

@@ -1,0 +1,47 @@
+.\" dotextwrap.1   -*- nroff -*-
+.TH dotextwrap 1 "2003-08-24"
+.SH NAME
+dotextwrap \- line-folding (text-wrapping) filter program with i18n support
+.SH SYNOPSIS
+dotextwrap [<columns> [<tabs> [<header1> [<header2>]]]]
+.\" ********************************************************************
+.SH DESCRIPTION
+\fBdotextwrap\fR is a small filter to wrap text or fold lines.  
+Text-wrapping means formatting a given text by adding newline
+characters at proper positions so that the text fits the given
+width (or number of columns) of the terminal.
+.P
+Since this is a filter, it reads from standard input and writes
+to standard output.
+.P
+Unlike other softwares, this supports internationalization.
+.P
+At first, this automatically detects the \fBcurrent LC_CTYPE locale\fR
+and follows it.
+.P
+Next, this supports \fBmultibyte encodings\fR such as UTF-8 and EUC-JP.
+In multibyte encodings, one character consists from one or more bytes.
+.P
+Third, this supports \fBfullwidth characters\fR such as CJK Ideogram,
+Katakana, Hiragana, and Hangul.  These characters occupy two columns
+per one character on the terminal.
+.P
+Forth, this supports \fBcombining characters\fR such as Thai and accents
+for Latin scripts.  These characters occupy zero columns per one character
+on the terminal.
+.P
+Fifth, this supports languages which do not use whitespaces between
+words.  In these languages, lines can be folded at any places with
+small amount of exception (such as before commas).
+.\" ********************************************************************
+.SH SEE ALSO
+Manual pages of
+\fBtextwrap\fR(3),
+\fBsetlocale\fR(3),
+\fBlocale\fR(7),
+\fBcharsets\fR(7), and
+\fBUTF-8\fR(7).
+.\" ********************************************************************
+.SH AUTHOR
+Tomohiro KUBOTA <kubota@debian.org>.
+

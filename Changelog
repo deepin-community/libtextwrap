@@ -1,0 +1,29 @@
+2003-08-24  Tomohiro KUBOTA <kubota@debian.org>
+
+	* API was changed for consistent handling of textwrap_t.
+	* Tab code support.
+	* Added a small program "dotextwrap" and its manpage.
+	* Manpage improvement.
+	* sample/testprog.c is obsoleted by dotextwrap.
+	* version 0.1
+
+2003-08-23  Tomohiro KUBOTA <kubota@debian.org>
+
+	* Added "libtoolize" to bootstrap so that it works well
+	  with automake 1.6 or later.
+	* The manpage is improved.
+
+2003-08-21  Tomohiro KUBOTA <kubota@debian.org>
+
+	* API was changed to use textwrap_t.
+	* Added a small sample program.
+
+2003-08-19  Tomohiro KUBOTA <kubota@debian.org>
+
+	* README was improved.  Instruction for compilation and
+	  usage was added.
+
+2003-08-16  Tomohiro KUBOTA <kubota@debian.org>
+
+	* version 0.01
+	* Initial version.

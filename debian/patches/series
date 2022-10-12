@@ -1,0 +1,3 @@
+0001-Debian-bug-237630-error-in-string.patch
+0002-makefile-dependencies.patch
+0003-textwrap-memory-leak.patch

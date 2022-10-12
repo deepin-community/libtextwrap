@@ -1,0 +1,6 @@
+usr/bin/dotextwrap
+usr/include/textwrap.h
+usr/lib/*/libtextwrap.a
+usr/lib/*/libtextwrap.so
+usr/share/man/man1/dotextwrap.1
+usr/share/man/man3/textwrap.3

@@ -1,0 +1,61 @@
+From: GUO Yixuan <culu.gyx@gmail.com>
+Date: Mon, 27 Apr 2015 13:42:40 -0400
+Subject: textwrap memory leak
+
+Bug-Debian: https://bugs.debian.org/783580
+---
+ textwrap.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/textwrap.c b/textwrap.c
+index 0d40b9d..8da2d63 100644
+--- a/textwrap.c
++++ b/textwrap.c
+@@ -256,6 +256,7 @@ textwrap(const textwrap_t *prop, const char *text)
+   /* locale initialization */
+   encoding = normalize(nl_langinfo(CODESET));
+   encoding_type = set_encoding_type(encoding);
++  free(encoding);
+ 
+   /* buffer initialization */
+   len = strlen(text);
+@@ -295,6 +296,7 @@ textwrap(const textwrap_t *prop, const char *text)
+ 
+     if (!*p) {
+       stringt_addstringt(out, word);
++      stringt_destroy(word);
+       return stringt_destroy_extract(out);
+     }
+ 
+@@ -306,6 +308,7 @@ textwrap(const textwrap_t *prop, const char *text)
+         * memory for out
+         */
+        stringt_addstr(out, " <ERR>");
++       stringt_destroy(word);
+        return stringt_destroy_extract(out);
+     }
+     w = mbwidth(p, ml);
+@@ -319,7 +322,10 @@ textwrap(const textwrap_t *prop, const char *text)
+     if (*now == '\n') {
+       stringt_addstringt(out, word);
+       stringt_addstr(out, "\n");
+-      if (!*p) return stringt_destroy_extract(out);
++      if (!*p) {
++          stringt_destroy(word);
++          return stringt_destroy_extract(out);
++      }
+       stringt_addstr(out, head2); line_width = head2_width;
+       stringt_zero(word); word_width = 0;
+       continue;
+@@ -334,7 +340,10 @@ textwrap(const textwrap_t *prop, const char *text)
+ 	/* new line */
+ 	stringt_addstringt(out, word);
+ 	stringt_addstr(out, "\n");
+-	if (!*p) return stringt_destroy_extract(out);
++	if (!*p) {
++	    stringt_destroy(word);
++	    return stringt_destroy_extract(out);
++	}
+ 	stringt_addstr(out, head2); line_width = head2_width;
+ 	stringt_zero(word); word_width = 0;
+       } else {

@@ -1,0 +1,111 @@
+.\" textwrap.3   -*- nroff -*-
+.TH textwrap 3 "2003-08-16"
+.SH NAME
+textwrap \- line-folding (text-wrapping) library with i18n support
+.SH SYNOPSIS
+\fB#include <textwrap.h>\fR
+
+\fBvoid textwrap_init(textwrap_t *prop);\fR
+.br
+\fBvoid textwrap_columns(textwrap_t *prop, int columns);\fR
+.br
+\fBvoid textwrap_tab(textwrap_t *prop, int tab);\fR
+.br
+\fBvoid textwrap_head(textwrap_t *prop, const char *head1, const char *head2);\fR
+.br
+\fBchar *textwrap(const textwrap_t *prop, const char *text);\fR
+.\" ********************************************************************
+.SH DESCRIPTION
+\fBtextwrap\fR is a library to wrap given text to fit the terminal with
+a certain width.  This is like \fBText::Wrap\fR(3pm).
+.P
+Unlike other libraries or functions, this supports internationalization.
+.P
+At first, this automatically detects the \fBcurrent LC_CTYPE locale\fR
+and follows it.
+To enable this, your application must call \fBsetlocale\fR(3) in advance.
+.P
+Next, this supports \fBmultibyte encodings\fR such as UTF-8 and EUC-JP.
+In multibyte encodings, one character consists from one or more bytes.
+.P
+Third, this supports \fBfullwidth characters\fR such as CJK Ideogram,
+Katakana, Hiragana, and Hangul.  These characters occupy two columns
+per one character on the terminal.
+.P
+Forth, this supports \fBcombining characters\fR such as Thai and accents
+for Latin scripts.  These characters occupy zero columns per one character
+on the terminal.
+.P
+Fifth, this supports languages which do not use whitespaces between
+words.  In these languages, lines can be folded at any places with
+small amount of exception (such as before commas).
+.\" ********************************************************************
+.SH USAGE
+At first, you will have to prepare a set of parameters as \fItextwrap_t\fR.
+Prepare a variable of \fItextwrap_t\fR and then call \fBtextwrap_init()\fR
+with the pointer to the variable.
+.P
+Members of \fItextwrap_t\fR may change in future.  Thus, please use
+API functions to modify values of these members.
+.TP
+\fBtextwrap_columns()\fR
+Specifies the number of columns or width of your terminal.
+The result string will not have longer line than this value.
+The default value is 76.
+.TP
+\fBtextwrap_tab()\fR
+Specifies the number of columns for TAB code.
+The default is 8.
+.TP
+\fBtextwrap_head()\fR
+Specifies strings which will be added at the top of the top line
+and following lines.  The defaults are NULL for \fBhead1\fR and
+NULL for \fBhead2\fR.
+.P
+The real text-wrapping is performed by \fBtextwrap()\fR.
+The text to be folded is given as \fItext\fR.  The text must be encoded
+in the current LC_CTYPE locale, i.e., ISO-8859-1 in ISO-8859-1 locales,
+KOI8-R in KOI8-R locales, EUC-JP in EUC-JP locales, UTF-8 in UTF-8
+locales, and so on.  
+Though you might not be very familiar with the term LC_CTYPE locale,
+this behavior is under what most of users use UNIX-like systems.  Thus,
+you do not have to convert the encoding
+of the string.
+.P
+The \fItext\fR can contain tab code (0x09).  The tab is converted into
+proper number of space code (0x20) by \fBtextwrap\fR.
+.\" ********************************************************************
+.SH RETURN VALUE
+\fBtextwrap()\fR returns the line-folded text.
+You can free(3) the given value.
+.\" ********************************************************************
+.SH EXAMPLE
+.nf
+#include <stdio.h>
+#include <textwrap.h>
+
+main()
+{
+    textwrap_t property;
+    char *text = "This is a sample.\\n";
+    char *outtext;
+
+    textwrap_init(&property);
+    textwrap_columns(&property, 70);
+    outtext = textwrap(&property, text);
+    printf("%s\\n",outtext);
+    free(outtext);
+}
+.fi
+.\" ********************************************************************
+.SH SEE ALSO
+Manual pages of
+\fBdotextwrap\fR(1),
+\fBsetlocale\fR(3),
+\fBlocale\fR(7),
+\fBcharsets\fR(7), and
+\fBUTF-8\fR(7).
+.\" ********************************************************************
+.SH AUTHOR
+Tomohiro KUBOTA <kubota@debian.org>.
+
